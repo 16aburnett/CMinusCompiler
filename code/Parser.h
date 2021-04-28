@@ -16,6 +16,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <initializer_list>
 
 #include "Lexer.h"
 #include "CMinusAst.h"
@@ -34,13 +35,13 @@ private:
 
     void
     match (std::string function, 
-        std::vector<TokenType> expectedTokenTypes, 
+        std::initializer_list<TokenType> expectedTokenTypes, 
         std::string additional
     );
 
     void
     error (std::string function, 
-        std::vector<TokenType> expectedTokenTypes,
+        std::initializer_list<TokenType> expectedTokenTypes,
         std::string additional);
 
     void 

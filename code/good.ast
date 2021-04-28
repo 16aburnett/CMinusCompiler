@@ -1,0 +1,96 @@
+ProgramNode:
+
+  Function: getone: Int type
+    Parameter: ignored: Int type
+    CompoundStatement:
+      Return
+        Integer: 1
+
+  Function: main: void type
+    CompoundStatement:
+      VariableDeclaration: foo: Int type
+      VariableDeclaration: bar: Int type
+      VariableDeclaration: baz[1]: Int type
+      ExpressionStatement: 
+        Assignment:
+          Variable: foo
+          Integer: 4
+      ExpressionStatement: 
+        Assignment:
+          Variable: bar
+          Integer: 2
+      ExpressionStatement: 
+        Assignment:
+          Subscript: baz
+            Index:
+              MultiplicativeExpression: /
+                Left:
+                  AdditiveExpression: -
+                    Left:
+                      Variable: foo
+                    Right:
+                      Variable: bar
+                Right:
+                  Variable: bar
+          AdditiveExpression: +
+            Left:
+              MultiplicativeExpression: *
+                Left:
+                  Variable: foo
+                Right:
+                  Integer: 10
+            Right:
+              Variable: bar
+      ExpressionStatement: 
+        AdditiveExpression: +
+          Left:
+            Subscript: baz
+              Index:
+                MultiplicativeExpression: /
+                  Left:
+                    AdditiveExpression: -
+                      Left:
+                        Variable: foo
+                      Right:
+                        Variable: bar
+                  Right:
+                    Variable: bar
+          Right:
+            Integer: 1
+      ExpressionStatement: 
+        Assignment:
+          Variable: bar
+          Subscript: baz
+            Index:
+              FunctionCall: getone
+                Arguments:
+                  Variable: foo
+      If
+        Assignment:
+          Variable: bar
+          FunctionCall: getone
+            Arguments:
+              Integer: 2
+        CompoundStatement:
+          ExpressionStatement: 
+            Assignment:
+              Variable: bar
+              Subscript: baz
+                Index:
+                  Integer: 1
+          While
+            RelationalExpression: >
+              Left:
+                Variable: bar
+              Right:
+                Integer: 1
+            CompoundStatement:
+              ExpressionStatement: 
+                Assignment:
+                  Variable: foo
+                  AdditiveExpression: -
+                    Left:
+                      Variable: bar
+                    Right:
+                      Integer: 1
+      Return

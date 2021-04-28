@@ -153,6 +153,7 @@ struct DeclarationNode : Node
     // Class Members 
     CMinusAST::Type m_type;
     std::string m_id; 
+    int m_nestLevel; 
     
     //--------------------------------------------------------------------
 

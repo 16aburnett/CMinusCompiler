@@ -12,6 +12,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <initializer_list>
 
 #include "Lexer.h"
 #include "Parser.h"
@@ -35,7 +36,7 @@ Parser::Parser(std::vector<Token> tokens, bool doDebug=false)
 
 void
 Parser::match (std::string function, 
-    std::vector<TokenType> expectedTokenTypes, 
+    std::initializer_list<TokenType> expectedTokenTypes, 
     std::string additional="")
 {
     for (TokenType expectedToken : expectedTokenTypes)
@@ -57,7 +58,7 @@ Parser::match (std::string function,
 
 void
 Parser::error (std::string function, 
-    std::vector<TokenType> expectedTokenTypes,
+    std::initializer_list<TokenType> expectedTokenTypes,
     std::string additional="")
 {
     printf ("Error while parsing '%s'\n", function.c_str());
@@ -69,9 +70,10 @@ Parser::error (std::string function,
     printf ("  Expected   : ");
     if (expectedTokenTypes.size() > 0)
     {
-        printf ("%s", tokenToString(expectedTokenTypes[0]));
-        for (size_t i = 1; i < expectedTokenTypes.size(); ++i)
-            printf (" or %s", tokenToString(expectedTokenTypes[i]));
+        auto iter = expectedTokenTypes.begin ();
+        printf ("%s", tokenToString(*iter++));
+        for ( ; iter != expectedTokenTypes.end (); ++iter)
+            printf (" or %s", tokenToString(*iter));
     }
     printf ("\n");
     exit(1);

@@ -40,7 +40,7 @@ LDLIBS :=
 #         recipe
 #############################################################
 
-$(EXEC) : CMinusAst.o CMinus.o Lexer.o Parser.o SymbolTable.o
+$(EXEC) : CMinusAst.o CMinus.o Lexer.o Parser.o SymbolTable.o SymbolTableVisitor.o
 	$(LINK) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 %.o : %.cc

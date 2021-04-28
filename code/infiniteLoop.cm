@@ -1,0 +1,17 @@
+/**
+ * Hope you enjoy watching a program chug forever
+ */
+void loop ( void )
+{
+	while ( 1 )
+	;
+}
+
+/**
+ * Infinite loop + recursion = stack death
+ */
+void recurse ( void )
+{
+	while ( 1 )
+	      recurse ();
+}

@@ -1,0 +1,19 @@
+/*
+  Filename   : sample.txt
+  Author     : Amy Burnett
+  Course     : CSCI 435
+  Assignment : Lab 8 - CMinus Parser
+*/
+
+int
+main (void)
+{
+    int myNum1;
+    int num2;
+    // single line comment 
+    myNum1 = 7;
+    num2 = /*this is block comment*/231;
+    print(myNum1 / num2);
+    return 0; 
+}
+

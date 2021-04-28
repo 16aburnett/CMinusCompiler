@@ -1,0 +1,36 @@
+int x[10];
+
+void
+main (void x, int y)
+{ 
+  while (i < 23)
+  {
+    x[i] = input ();
+    i = i + 1;
+  }
+  if (i <= j)
+    i = i + 1;
+  else if (i > j)
+    i = 5 * j / k - 1;
+  else if (i >= j)
+    ;
+  else if (i == j)
+    ;
+  else if (i != j)
+    ;
+
+  /*  2-line 
+      comment */ not in comment **/
+
+  &error:
+
+  i = 5;
+  while (i > 0)
+  {
+    output (i);
+    i = i - 1; 
+  }   
+  while123 = 2;
+
+  return 0;
+}

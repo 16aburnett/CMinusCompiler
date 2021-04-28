@@ -29,7 +29,7 @@
 
 /********************************************************************/
 
-class SymbolTableVisitor : IVisitor 
+struct SymbolTableVisitor : IVisitor 
 {
 private:
     // for storing and looking up variable type information

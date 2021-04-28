@@ -79,6 +79,25 @@ Lexer::Lexer (FILE* srcFile)
 //========================================================================
 
 /*
+  Tokenizes this parser's srcfile and returns a vector of the tokens
+*/
+std::vector<Token> 
+Lexer::tokenize ()
+{
+    std::vector<Token> tokens; 
+
+    // process each token until the EOF token is reached 
+    do
+    {
+        tokens.push_back (getToken ());
+    } while (tokens.back ().type != END_OF_FILE);
+
+    return tokens; 
+}
+
+//========================================================================
+
+/*
   Retrieves the next token from the file stream
   - returns a Token object with the token type, lexeme, and number value
 */

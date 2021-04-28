@@ -11,6 +11,7 @@
 //========================================================================
 
 #include <string>
+#include <vector>
 
 //========================================================================
 
@@ -65,6 +66,9 @@ class Lexer
 {
 public:
   Lexer (FILE* srcFile);
+
+  std::vector<Token>
+  tokenize ();
 
   Token
   getToken ();

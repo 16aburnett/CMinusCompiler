@@ -76,6 +76,9 @@ Parser::error (std::string function,
             printf (" or %s", tokenToString(*iter));
     }
     printf ("\n");
+    // additional error info
+    if (additional.size() > 0)
+        printf ("  Additional : %s\n", additional.c_str ());
     exit(1);
 }
 
@@ -166,6 +169,14 @@ Parser::declarationList ()
         // match the declaration 
         declarations.push_back(declaration());
     }
+
+    // should end in EOF
+    if (m_tokens[m_currentToken].type != END_OF_FILE)
+        error (
+            "declarationList", 
+            {INT, VOID}, 
+            "Only declarations are allowed at program scope."
+        );
 
     leave ("declarationList");
 
@@ -277,26 +288,31 @@ Parser::typeSpecifier ()
 {
     enter ("typeSpecifier");
 
+    CMinusAST::Type type; 
+
     // INT
     if (m_tokens[m_currentToken].type == INT)
     {
         match ("typeSpecifier", {INT});
-        return CMinusAST::INT;
+        type = CMinusAST::INT;
     }
     // VOID
     else if (m_tokens[m_currentToken].type == VOID)
     {
         match ("typeSpecifier", {VOID});
-        return CMinusAST::VOID;
+        type = CMinusAST::VOID;
     }
     // Invalid
     else 
     {
         error ("typeSpecifier", {INT, VOID});
-        return CMinusAST::VOID; 
+        type = CMinusAST::VOID; 
     }
 
     leave ("typeSpecifier");
+
+    return type;
+
 }
 
 //========================================================================
@@ -602,7 +618,7 @@ Parser::expressionStatement ()
         expr = expression ();
     }
     // match the semicolon
-    match ("expressionStatement", {SEMI});
+    match ("expressionStatement", {SEMI}, "You may be missing a semicolon");
 
     leave ("expressionStatement");
 

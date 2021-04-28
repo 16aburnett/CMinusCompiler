@@ -1,5 +1,5 @@
 Filename:   Team.txt
-Names:       Amy Burnett and Lauren Deaver 
+Names:      Amy Burnett and Lauren Deaver 
 Course:     CSCI 435 - Compilers
 Assignment: A10CMinusSymbolTree
 Date:       TBD

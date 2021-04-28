@@ -23,16 +23,25 @@
 //========================================================================
 // Using declarations
 
-std::vector<Token> 
-tokenize (FILE*);
-
 //========================================================================
 int
 main (int argc, char* argv[])
 {
+    //=== Source Code ====================================================
     FILE* srcfile = stdin;
     std::string destFilename = "Default.ast";
-    if (argc > 1)
+    // invalid usage
+    if (argc > 2)
+    {
+        printf ("Usage:\n");
+        printf ("\t%s\n", argv[0]);
+        printf ("\t\t- Compiles CMinus code from stdin\n");
+        printf ("\t%s <filename>\n", argv[0]);
+        printf ("\t\t- Compiles CMinus code from <filename>\n");
+        return EXIT_FAILURE; 
+    }
+    // file provided
+    if (argc == 2)
     {
         srcfile = fopen (argv[1], "r");
         // get root name of file for the dest file
@@ -45,9 +54,12 @@ main (int argc, char* argv[])
         destFilename = rootName.append(".ast");
     }
 
+    //=== Lexing =========================================================
     // lex and tokenize the source code 
-    std::vector<Token> tokens = tokenize(srcfile);
+    Lexer lexer (srcfile);
+    std::vector<Token> tokens = lexer.tokenize ();
 
+    //=== Parsing ========================================================
     // attempt to parse the tokens 
     // and obtain an ast 
     Parser parser (tokens, false); 
@@ -55,7 +67,13 @@ main (int argc, char* argv[])
 
     // reaches here if it was a successful parse 
     std::cout << "Valid!" << std::endl;
+
+    //=== Semantic Analysis ==============================================
+    // Ensures that each variable was declared only once
+    SymbolTableVisitor symbolTableVisitor;
+    ast->accept (&symbolTableVisitor);
     
+    //=== Printing AST ===================================================
     // Print out the ast 
     PrintVisitor printVisitor; 
     ast->accept (&printVisitor);
@@ -63,7 +81,6 @@ main (int argc, char* argv[])
     std::string output = printVisitor.m_outputString.str();
     // remove ending newline
     output = output.substr(0, output.size()-1);
-    
     // print string to dest file 
     std::cout << "Writing AST to \"";
     std::cout << destFilename;
@@ -71,29 +88,13 @@ main (int argc, char* argv[])
     std::ofstream destFile (destFilename);
     destFile << output; 
 
+    //=== Code Generation ================================================
+    // coming soon!
+    
     // clean up resources
     delete ast; 
 
     return EXIT_SUCCESS;
-}
-
-//========================================================================
-std::vector<Token> 
-tokenize (FILE* srcfile)
-{
-
-    Lexer lexer (srcfile);
-    std::vector<Token> tokens; 
-
-    // process each token until the EOF token is reached 
-    do
-    {
-        // Ask lexer for next token 
-        tokens.push_back(lexer.getToken());
-
-    } while (tokens.back().type != END_OF_FILE);
-
-    return tokens; 
 }
 
 //========================================================================

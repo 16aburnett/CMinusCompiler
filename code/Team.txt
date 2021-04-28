@@ -1,9 +1,34 @@
-Team Memebers: Amy Burnett and Lauren Deaver 
+Filename:   Team.txt
+Names:       Amy Burnett and Lauren Deaver 
+Course:     CSCI 435 - Compilers
+Assignment: A10CMinusSymbolTree
+Date:       TBD
+//========================================================================
 
 Contributions:
+ - Amy:
+    - 
+ - Lauren:
+    - 
+
+//========================================================================
 
 Functionally Working:
+    - Lexer
+    - Parser
+    - PrintVisitor
+
+//========================================================================
 
 Not Functionally Working:
 
+
+//========================================================================
+
 Struggle Areas:
+    - std::unique_ptr
+        - I don't believe I have used a unique_ptr before and that took some
+            research to figure out. 
+
+
+//========================================================================

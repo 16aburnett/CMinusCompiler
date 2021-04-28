@@ -17,6 +17,8 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "CMinusAst.h"
+#include "PrintVisitor.h"
+#include "SymbolTableVisitor.h"
 
 //========================================================================
 // Using declarations

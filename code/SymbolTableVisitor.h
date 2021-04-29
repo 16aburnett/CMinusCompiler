@@ -31,11 +31,10 @@
 
 struct SymbolTableVisitor : IVisitor 
 {
-private:
     // for storing and looking up variable type information
     SymbolTable m_symbolTable;
 
-public:
+    bool m_wasSuccessful = true;
 
     virtual void visit (ProgramNode* node);
     virtual void visit (DeclarationNode* node);

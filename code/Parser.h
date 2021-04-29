@@ -65,13 +65,23 @@ private:
     declaration ();
 
     VariableDeclarationNode*  
-    varDeclaration (CMinusAST::Type type, std::string var);
+    varDeclaration (
+        CMinusAST::Type type, 
+        std::string var, 
+        int lineno, 
+        int columnno
+    );
 
     CMinusAST::Type  
     typeSpecifier ();
 
     FunctionDeclarationNode* 
-    funDeclaration (CMinusAST::Type type, std::string var);
+    funDeclaration (
+        CMinusAST::Type type, 
+        std::string var, 
+        int lineno, 
+        int columnno
+    );
 
     std::vector<ParameterNode*>   
     params ();

@@ -1,0 +1,23 @@
+ProgramNode:
+
+  VariableDeclaration: nums[0]: Int type
+
+  Function: func: Int type
+    Parameter: a: Int type
+    Parameter: b: Int type
+    Parameter: c: Int type
+    Parameter: a: Int type
+    CompoundStatement:
+      VariableDeclaration: b: Int type
+      VariableDeclaration: b[0]: Int type
+      Return
+        Variable: x
+
+  VariableDeclaration: nums[1]: void type
+
+  Function: main: Int type
+    CompoundStatement:
+      ExpressionStatement: 
+        FunctionCall: pizza
+          Arguments:
+            Integer: 10

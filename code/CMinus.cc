@@ -65,13 +65,21 @@ main (int argc, char* argv[])
     Parser parser (tokens, false); 
     Node* ast = parser.parse ();
 
-    // reaches here if it was a successful parse 
-    std::cout << "Valid!" << std::endl;
-
     //=== Semantic Analysis ==============================================
     // Ensures that each variable was declared only once
     SymbolTableVisitor symbolTableVisitor;
+
+    // insert input and output built-in variables 
+    //***
+
+    // check the ast 
     ast->accept (&symbolTableVisitor);
+    // ensure it was successful
+    if (!symbolTableVisitor.m_wasSuccessful)
+        return EXIT_FAILURE;
+
+    // reaches here if code passes semantic analyzer 
+    std::cout << "Valid!" << std::endl;
     
     //=== Printing AST ===================================================
     // Print out the ast 

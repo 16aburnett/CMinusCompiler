@@ -1,0 +1,9 @@
+CMinus.cc: In function ‘int main(int, char**)’:
+CMinus.cc:109:1: error: redefinition of ‘int main(int, char**)’
+ main (int argc, char* argv[])
+ ^~~~
+CMinus.cc:28:1: note: ‘int main(int, char**)’ previously defined here
+ main (int argc, char* argv[])
+ ^~~~
+Makefile:47: recipe for target 'CMinus.o' failed
+make: *** [CMinus.o] Error 1

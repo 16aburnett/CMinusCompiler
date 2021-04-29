@@ -91,7 +91,7 @@ PrintVisitor::visit (FunctionDeclarationNode* node)
     ++m_level; 
 
     // print out each of the parameters
-    for (ParameterNode* p : node->m_params)
+    for (DeclarationNode* p : node->m_params)
         p->accept (this);
 
     // print the compound statement 

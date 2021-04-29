@@ -154,10 +154,16 @@ struct DeclarationNode : Node
     CMinusAST::Type m_type;
     std::string m_id; 
     int m_nestLevel; 
+    int m_lineno;
+    int m_columnno;
     
     //--------------------------------------------------------------------
 
-    DeclarationNode (CMinusAST::Type _type, std::string _id);
+    DeclarationNode (
+        CMinusAST::Type _type, 
+        std::string _id, 
+        int lineno, int columnno
+    );
 
     //--------------------------------------------------------------------
 
@@ -183,7 +189,9 @@ struct VariableDeclarationNode : DeclarationNode
 
     VariableDeclarationNode (
         CMinusAST::Type _type, 
-        std::string _id
+        std::string _id,
+        int lineno,
+        int columnno
     );
     
     //--------------------------------------------------------------------
@@ -212,6 +220,8 @@ struct ArrayDeclarationNode : VariableDeclarationNode
     ArrayDeclarationNode (
         CMinusAST::Type _type, 
         std::string _id, 
+        int lineno,
+        int columnno,
         size_t _size
     );
     
@@ -242,6 +252,8 @@ struct FunctionDeclarationNode : DeclarationNode
     FunctionDeclarationNode (
         CMinusAST::Type _type, 
         std::string _id, 
+        int lineno,
+        int columnno,
         std::vector<ParameterNode*> params, 
         CompoundStatementNode* body
     );
@@ -261,17 +273,21 @@ struct FunctionDeclarationNode : DeclarationNode
 
 //========================================================================
 
-struct ParameterNode : Node
+struct ParameterNode : DeclarationNode
 {
     //--------------------------------------------------------------------
     // Class members 
-    CMinusAST::Type   m_type;
-    std::string       m_id;
-    bool              m_isArray;
+    bool m_isArray;
  
     //--------------------------------------------------------------------
 
-    ParameterNode (CMinusAST::Type type, std::string id, bool isArray);
+    ParameterNode (
+        CMinusAST::Type type, 
+        std::string id, 
+        int lineno,
+        int columnno,
+        bool isArray
+    );
     
     //--------------------------------------------------------------------
 
@@ -632,11 +648,18 @@ struct VariableExpressionNode : ExpressionNode
 {
     //--------------------------------------------------------------------
     // Class members 
+    CMinusAST::Type m_type;
     std::string m_id;
+    int m_lineno;
+    int m_columnno; 
 
     //--------------------------------------------------------------------
 
-    VariableExpressionNode (std::string id);
+    VariableExpressionNode (
+        std::string id,
+        int lineno,
+        int columnno
+    );
     
     //--------------------------------------------------------------------
 
@@ -661,7 +684,12 @@ struct SubscriptExpressionNode : VariableExpressionNode
 
     //--------------------------------------------------------------------
 
-    SubscriptExpressionNode (std::string id, ExpressionNode* subscript);
+    SubscriptExpressionNode (
+        std::string id, 
+        int lineno, 
+        int columnno,
+        ExpressionNode* subscript
+    );
     
     //--------------------------------------------------------------------
 
@@ -682,13 +710,18 @@ struct CallExpressionNode : ExpressionNode
 {
     //--------------------------------------------------------------------
     // Class members 
+    CMinusAST::Type m_type;
     std::string m_id; 
+    int m_lineno;
+    int m_columnno;
     std::vector<ExpressionNode*> m_args;
 
     //--------------------------------------------------------------------
 
     CallExpressionNode (
         std::string id, 
+        int lineno,
+        int columnno,
         std::vector<ExpressionNode*> args
     );
     

@@ -99,8 +99,13 @@ ProgramNode::accept (IVisitor* visitor)
 //========================================================================
 // DeclarationNode 
 
-DeclarationNode::DeclarationNode (CMinusAST::Type _type, std::string _id)
-: m_type(_type), m_id(_id)
+DeclarationNode::DeclarationNode (
+    CMinusAST::Type _type, 
+    std::string _id, 
+    int lineno, 
+    int columnno
+)
+: m_type(_type), m_id(_id), m_lineno(lineno), m_columnno(columnno)
 {}
 
 //--------------------------------------------------------------------
@@ -112,8 +117,10 @@ DeclarationNode::~DeclarationNode () {}
 
 VariableDeclarationNode::VariableDeclarationNode (
     CMinusAST::Type _type, 
-    std::string _id
-): DeclarationNode(_type, _id)
+    std::string _id,
+    int lineno,
+    int columnno
+): DeclarationNode(_type, _id, lineno, columnno)
 {}
 
 //--------------------------------------------------------------------
@@ -133,9 +140,11 @@ VariableDeclarationNode::accept (IVisitor* visitor)
 
 ArrayDeclarationNode::ArrayDeclarationNode (
     CMinusAST::Type _type, 
-    std::string _id, 
+    std::string _id,
+    int lineno,
+    int columnno, 
     size_t _size
-): VariableDeclarationNode(_type, _id),
+): VariableDeclarationNode(_type, _id, lineno, columnno),
     m_size(_size)
 {}
 
@@ -153,10 +162,12 @@ ArrayDeclarationNode::accept (IVisitor* visitor)
 FunctionDeclarationNode::FunctionDeclarationNode (
     CMinusAST::Type _type, 
     std::string _id, 
+    int lineno,
+    int columnno,
     std::vector<ParameterNode*> params, 
     CompoundStatementNode* body
 )
-: DeclarationNode(_type, _id),
+: DeclarationNode(_type, _id, lineno, columnno),
     m_params(params),
     m_body(body)
 {}
@@ -184,8 +195,10 @@ FunctionDeclarationNode::accept (IVisitor* visitor)
 ParameterNode::ParameterNode (
     CMinusAST::Type type, 
     std::string id, 
+    int lineno,
+    int columnno,
     bool isArray
-): m_type(type), m_id(id), m_isArray(isArray)
+): DeclarationNode(type, id, lineno, columnno), m_isArray(isArray)
 {}
 
 //------------------------------------------------------------------------
@@ -492,8 +505,12 @@ AssignmentExpressionNode::accept (IVisitor* visitor)
 //========================================================================
 // VariableExpressionNode
 
-VariableExpressionNode::VariableExpressionNode (std::string id) 
-: m_id(id)
+VariableExpressionNode::VariableExpressionNode (
+    std::string id,
+    int lineno,
+    int columnno
+) 
+: m_id(id), m_lineno(lineno), m_columnno(columnno)
 {}
 
 //--------------------------------------------------------------------
@@ -513,8 +530,10 @@ VariableExpressionNode::accept (IVisitor* visitor)
 
 SubscriptExpressionNode::SubscriptExpressionNode (
     std::string id, 
+    int lineno,
+    int columnno,
     ExpressionNode* subscript
-) : VariableExpressionNode(id),
+) : VariableExpressionNode(id, lineno, columnno),
     m_subscript(subscript)
 {}
 
@@ -538,8 +557,10 @@ SubscriptExpressionNode::accept (IVisitor* visitor)
 
 CallExpressionNode::CallExpressionNode (
     std::string id, 
+    int lineno,
+    int columnno,
     std::vector<ExpressionNode*> args
-): m_id(id), m_args(args)
+): m_id(id), m_lineno(lineno), m_columnno(columnno), m_args(args)
 {}
 
 //--------------------------------------------------------------------

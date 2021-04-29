@@ -27,7 +27,15 @@
 void 
 SymbolTableVisitor::visit (ProgramNode* node)
 {
-    
+    // No declarations so nothing to do 
+    // just visit the next node(s)
+    // this is the same as in the PrintVisitor
+    for (DeclarationNode* decl : node->m_declarations)
+    {
+        // visit 
+        decl->accept (this);
+    }
+
 }
 
 //========================================================================
@@ -51,7 +59,7 @@ SymbolTableVisitor::visit (VariableDeclarationNode* node)
 void 
 SymbolTableVisitor::visit (ArrayDeclarationNode* node)
 {
-    
+
 }
 
 //========================================================================
@@ -59,7 +67,47 @@ SymbolTableVisitor::visit (ArrayDeclarationNode* node)
 void 
 SymbolTableVisitor::visit (FunctionDeclarationNode* node) 
 {
-    
+    // add declaration to the current scope 
+    bool wasSuccessful = m_symbolTable.insert (node);
+    // adding to the symbol table is unsuccessful when 
+    // the declaration is a duplicate
+    if (!wasSuccessful)
+    {
+        // print error message for the redeclaration
+        std::string varname = node->m_id;
+        DeclarationNode* originalDeclaration = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of %s\n", varname.c_str ());
+        printf ("  Originally on line %d: column %d\n", 
+            originalDeclaration->m_lineno, 
+            originalDeclaration->m_columnno
+        );
+        printf ("  Redeclaration on line %d: column %d\n", 
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+
+    // set up scope for the parameters and body of the function
+    m_symbolTable.enterScope ();
+
+    // add parameters to scope 
+    // parameters were changed to inherit from 
+    // DeclarationNode so we can add them to the scope
+    for (DeclarationNode* p : node->m_params)
+        p->accept (this);
+
+    // check body of function
+    // body would have a separate scope 
+    // but the scope will be handled in CompoundStatement.
+    // when looking up variables, the outter scopes
+    // are considered so the body has access to the parameters
+    // and the function declaration (for recursion)
+    node->m_body->accept (this);
+
+    // end of parameter/body scope
+    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -67,6 +115,7 @@ SymbolTableVisitor::visit (FunctionDeclarationNode* node)
 void 
 SymbolTableVisitor::visit (ParameterNode* node) 
 {
+    // similar to declarations 
     
 }
 
@@ -75,7 +124,7 @@ SymbolTableVisitor::visit (ParameterNode* node)
 void 
 SymbolTableVisitor::visit (StatementNode* node) 
 {
-    
+    // nothing to visit
 }
 
 //========================================================================
@@ -83,7 +132,14 @@ SymbolTableVisitor::visit (StatementNode* node)
 void 
 SymbolTableVisitor::visit (IfStatementNode* node) 
 {
-    
+    // No variables at this level
+    // just check children nodes 
+
+    node->m_condition->accept (this);
+    node->m_then->accept (this);
+    // optionally
+    if (node->m_else != nullptr)
+        node->m_else->accept (this);
 }
 
 //========================================================================
@@ -91,7 +147,7 @@ SymbolTableVisitor::visit (IfStatementNode* node)
 void 
 SymbolTableVisitor::visit (WhileStatementNode* node) 
 {
-    
+
 }
 
 //========================================================================
@@ -100,7 +156,7 @@ SymbolTableVisitor::visit (WhileStatementNode* node)
 void 
 SymbolTableVisitor::visit (ForStatementNode* node) 
 {
-       
+
 }
 
 
@@ -125,7 +181,20 @@ SymbolTableVisitor::visit (ReturnStatementNode* node)
 void 
 SymbolTableVisitor::visit (CompoundStatementNode* node) 
 {
-       
+    // compound statements have their own scope 
+    m_symbolTable.enterScope ();
+
+    // visit the declaration statements 
+    // any declaration will be added to this scope 
+    for (VariableDeclarationNode* v : node->m_vars)
+        v->accept (this);
+
+    // check that the statements reference declared variables 
+    for (StatementNode* s : node->m_statements)
+        s->accept (this);
+
+    // close scope 
+    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -133,7 +202,7 @@ SymbolTableVisitor::visit (CompoundStatementNode* node)
 void 
 SymbolTableVisitor::visit (ExpressionNode* node) 
 {
-    
+    // nothing to visit
 }
 
 //========================================================================
@@ -165,7 +234,7 @@ SymbolTableVisitor::visit (RelationalExpressionNode* node)
 void 
 SymbolTableVisitor::visit (AssignmentExpressionNode* node) 
 {
-    
+
 }
 
 //========================================================================
@@ -173,7 +242,27 @@ SymbolTableVisitor::visit (AssignmentExpressionNode* node)
 void 
 SymbolTableVisitor::visit (VariableExpressionNode* node) 
 {
-    
+    // Ensure that variable was declared previously
+    DeclarationNode* declaration = m_symbolTable.lookup (node->m_id);
+    if (declaration == nullptr)
+    {
+        // Print error message for undeclared variable 
+        printf ("Semantic Error: '%s' was not declared in this scope\n", 
+            node->m_id.c_str ()
+        );
+        printf ("  Located on line %d: column %d\n",
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+    // variable has a declaration
+    else
+    {
+        // Save type information with variable 
+        node->m_type = declaration->m_type;
+    }
 }
 
 //========================================================================
@@ -181,7 +270,7 @@ SymbolTableVisitor::visit (VariableExpressionNode* node)
 void 
 SymbolTableVisitor::visit (SubscriptExpressionNode* node) 
 {
-    
+
 }
 
 //========================================================================
@@ -189,7 +278,7 @@ SymbolTableVisitor::visit (SubscriptExpressionNode* node)
 void 
 SymbolTableVisitor::visit (CallExpressionNode* node) 
 {
-        
+
 }
 
 //========================================================================
@@ -197,7 +286,7 @@ SymbolTableVisitor::visit (CallExpressionNode* node)
 void 
 SymbolTableVisitor::visit (IntegerLiteralExpressionNode* node) 
 {
-    
+    // nothing to analyze 
 }
 
 //========================================================================
@@ -205,7 +294,8 @@ SymbolTableVisitor::visit (IntegerLiteralExpressionNode* node)
 void 
 SymbolTableVisitor::visit (UnaryExpressionNode* node) 
 {
-
+    // nothing to analyze
+    // not implemented in language
 }
 
 //========================================================================

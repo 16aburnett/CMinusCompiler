@@ -78,8 +78,8 @@ SymbolTable::insert (DeclarationNode* declarationPtr)
 {
     // Get the varname for the declaration
     std::string name = declarationPtr->m_id;
-    // Ensure variable wasn't already delcared
-    if (lookup (name))
+    // Ensure variable wasn't already delcared at current scope
+    if (m_table.back ().get ()->find (name) != m_table.back ().get ()->end ())
         return false;
     // Add declaration to symbol table
     m_table[m_nestLevel].get ()->insert ({name, declarationPtr});

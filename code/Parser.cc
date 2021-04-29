@@ -208,6 +208,10 @@ Parser::declaration ()
 
     // declaration starts with <typeSpec> 
     CMinusAST::Type type = typeSpecifier ();
+
+    // save location information
+    int lineno = m_tokens[m_currentToken].lineno;
+    int columnno = m_tokens[m_currentToken].columnno;
     // and an ID follows 
     std::string var = m_tokens[m_currentToken].lexeme;
     match ("declaration", {ID});
@@ -216,12 +220,12 @@ Parser::declaration ()
     if (m_tokens[m_currentToken].type == SEMI
         || m_tokens[m_currentToken].type == LBRACK)
     {
-        node = varDeclaration (type, var);
+        node = varDeclaration (type, var, lineno, columnno);
     }
     // <declaration> -> <typeSpecifier> ID <funDeclaration>
     else if (m_tokens[m_currentToken].type == LPAREN)
     {
-        node = funDeclaration (type, var);
+        node = funDeclaration (type, var, lineno, columnno);
     }
     // Unexpected token in lookahead
     else
@@ -245,7 +249,12 @@ Parser::declaration ()
     <varDeclaration> -> <typeSpecifier> ID [ '[' NUM ']' ] ;
 */
 VariableDeclarationNode* 
-Parser::varDeclaration (CMinusAST::Type type, std::string var)
+Parser::varDeclaration (
+    CMinusAST::Type type, 
+    std::string var, 
+    int lineno, 
+    int columnno
+)
 {
     enter ("varDeclaration");
 
@@ -259,12 +268,12 @@ Parser::varDeclaration (CMinusAST::Type type, std::string var)
         match ("varDeclaration", {NUM});
         match ("varDeclaration", {RBRACK});
         // this is an array declaration
-        node = new ArrayDeclarationNode(type, var, size);
+        node = new ArrayDeclarationNode(type, var, lineno, columnno, size);
     }
     // not an array
     else
     {
-        node = new VariableDeclarationNode(type, var);
+        node = new VariableDeclarationNode(type, var, lineno, columnno);
     }
 
     // ends in a semi colon 
@@ -323,7 +332,12 @@ Parser::typeSpecifier ()
     <funDeclaration> -> <typeSpecifier> ID '(' <params> ')' compoundStatement
 */
 FunctionDeclarationNode*
-Parser::funDeclaration (CMinusAST::Type type, std::string var)
+Parser::funDeclaration (
+    CMinusAST::Type type, 
+    std::string var, 
+    int lineno, 
+    int columnno
+)
 {
     enter ("funDeclaration");
 
@@ -334,7 +348,7 @@ Parser::funDeclaration (CMinusAST::Type type, std::string var)
 
     leave ("funDeclaration");
 
-    return new FunctionDeclarationNode(type, var, p, compound);
+    return new FunctionDeclarationNode(type, var, lineno, columnno, p, compound);
 }
 
 //========================================================================
@@ -419,20 +433,26 @@ Parser::param ()
     ParameterNode* node; 
 
     CMinusAST::Type type = typeSpecifier ();
+
+    // save location information
+    int lineno = m_tokens[m_currentToken].lineno;
+    int columnno = m_tokens[m_currentToken].columnno;
     std::string var = m_tokens[m_currentToken].lexeme;
+
     match ("param", {ID});
+    
     // [ '[' ']' ]
     // is an array 
     if (m_tokens[m_currentToken].type == LBRACK)
     {
         match ("param", {LBRACK});
         match ("param", {RBRACK});
-        node = new ParameterNode(type, var, true);
+        node = new ParameterNode(type, var, lineno, columnno, true);
     }
     // not array 
     else
     {
-        node = new ParameterNode(type, var, false);
+        node = new ParameterNode(type, var, lineno, columnno, false);
     }
 
     leave ("param");
@@ -486,11 +506,17 @@ Parser::localDeclarations ()
     {
         // <typeSpecifier> 
         CMinusAST::Type type = typeSpecifier ();
+
+        // save location information
+        int lineno = m_tokens[m_currentToken].lineno;
+        int columnno = m_tokens[m_currentToken].columnno;
+
         // ID
         std::string var = m_tokens[m_currentToken].lexeme;
         match ("declaration", {ID});
+
         // <varDeclaration>
-        decls.push_back (varDeclaration (type, var));
+        decls.push_back (varDeclaration (type, var, lineno, columnno));
     }
 
     leave ("localDeclarations");
@@ -816,8 +842,11 @@ Parser::var ()
 {
     enter ("var");
 
-    VariableExpressionNode* node; 
-
+    VariableExpressionNode* node = nullptr; 
+     
+    // save location information
+    int lineno = m_tokens[m_currentToken].lineno;
+    int columnno = m_tokens[m_currentToken].columnno;
     // match the ID
     std::string varname = m_tokens[m_currentToken].lexeme;
     match ("var", {ID});
@@ -828,12 +857,12 @@ Parser::var ()
         match ("var", {LBRACK});
         ExpressionNode* expr = expression ();
         match ("var", {RBRACK});
-        node = new SubscriptExpressionNode(varname, expr);
+        node = new SubscriptExpressionNode(varname, lineno, columnno, expr);
     }
     // just ID
     else
     {
-        node = new VariableExpressionNode(varname);
+        node = new VariableExpressionNode(varname, lineno, columnno);
     }
 
     leave ("var");
@@ -1074,6 +1103,9 @@ Parser::call ()
 {
     enter ("call");
 
+    // save location information
+    int lineno = m_tokens[m_currentToken].lineno;
+    int columnno = m_tokens[m_currentToken].columnno;
     std::string id = "";
     if (m_tokens[m_currentToken].type == ID)
         id = m_tokens[m_currentToken].lexeme;
@@ -1087,7 +1119,7 @@ Parser::call ()
 
     leave ("call");
 
-    return new CallExpressionNode(id, a);
+    return new CallExpressionNode(id, lineno, columnno, a);
 }
 
 //========================================================================
@@ -1128,7 +1160,7 @@ Parser::argList ()
 
     // <expression>
     a.push_back(expression ());
-    // { , <expression }
+    // { , <expression> }
     while (m_tokens[m_currentToken].type == COMMA)
     {
         // , 

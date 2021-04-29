@@ -76,7 +76,7 @@ SymbolTableVisitor::visit (FunctionDeclarationNode* node)
         // print error message for the redeclaration
         std::string varname = node->m_id;
         DeclarationNode* originalDeclaration = m_symbolTable.lookup (varname);
-        printf ("Semantic Error: Redeclaration of %s\n", varname.c_str ());
+        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
         printf ("  Originally on line %d: column %d\n", 
             originalDeclaration->m_lineno, 
             originalDeclaration->m_columnno

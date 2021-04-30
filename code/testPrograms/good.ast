@@ -59,18 +59,22 @@ ProgramNode:
             Integer: 1
       ExpressionStatement: 
         Assignment:
-          Variable: bar
-          Subscript: baz
-            Index:
-              FunctionCall: getone
-                Arguments:
-                  Variable: foo
+          Variable: foo
+          Assignment:
+            Variable: bar
+            Subscript: baz
+              Index:
+                FunctionCall: getone
+                  Arguments:
+                    Variable: foo
       If
         Assignment:
-          Variable: bar
-          FunctionCall: getone
-            Arguments:
-              Integer: 2
+          Variable: foo
+          Assignment:
+            Variable: bar
+            FunctionCall: getone
+              Arguments:
+                Integer: 2
         CompoundStatement:
           ExpressionStatement: 
             Assignment:
@@ -87,10 +91,12 @@ ProgramNode:
             CompoundStatement:
               ExpressionStatement: 
                 Assignment:
-                  Variable: foo
-                  AdditiveExpression: -
-                    Left:
-                      Variable: bar
-                    Right:
-                      Integer: 1
+                  Variable: bar
+                  Assignment:
+                    Variable: foo
+                    AdditiveExpression: -
+                      Left:
+                        Variable: bar
+                      Right:
+                        Integer: 1
       Return

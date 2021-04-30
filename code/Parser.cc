@@ -766,7 +766,8 @@ Parser::expression ()
     // Stores each matched assignment expression
     // x = y = z = 10 + 3;
     // is optional 
-    AssignmentExpressionNode* lhs = nullptr;
+    AssignmentExpressionNode* root = nullptr;
+    AssignmentExpressionNode* lastAssign = nullptr;
 
     // requires variable amount of lookahead because <var> and <simpleExpression>
     // both can start with ID and <var> can have a variable amount of tokens 
@@ -790,14 +791,22 @@ Parser::expression ()
             // make a new assignment statement
             // save the var 
             AssignmentExpressionNode* rhs = new AssignmentExpressionNode(v, nullptr);
-            // if there was already an assign statement 
-            if (lhs != nullptr)
+            // if this is the first assignment expression
+            if (root == nullptr)
             {
-                // make this assign statement the rhs of the prev
-                lhs->m_rhs = rhs; 
+                // make this the root of the assignment expressions
+                root = rhs;
+                // set up prev assign 
+                lastAssign = root;
             }
-            // this assign becomes the previous assign
-            lhs = rhs; 
+            // if this is not the first assignment expression
+            else
+            {
+                // add to the last assign expression
+                lastAssign->m_rhs = rhs; 
+                // advance last assign expression
+                lastAssign = rhs; 
+            }
             
         }
         // no ASSIGN op 
@@ -816,13 +825,14 @@ Parser::expression ()
 
     leave ("expression");
 
-    // if there was an assign statement 
-    if (lhs != nullptr)
+    // if there was at least one assign statement 
+    if (root != nullptr)
     {
-        // add this as the rhs of the assign statement
-        lhs->m_rhs = expr; 
-        // the assignment statement becomes the target expression to return 
-        return lhs; 
+        // add this as the rhs of the last assign statement
+        lastAssign->m_rhs = expr; 
+        // the whole assignment statement becomes the
+        // target expression to return
+        return root; 
     }
 
     // otherwise expr is the only expression

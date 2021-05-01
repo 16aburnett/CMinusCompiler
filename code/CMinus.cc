@@ -70,7 +70,10 @@ main (int argc, char* argv[])
     SymbolTableVisitor symbolTableVisitor;
 
     // insert input and output built-in variables 
-    //***
+    VariableDeclarationNode* inputFunc = new VariableDeclarationNode (CMinusAST::INT, "input", 0, 0);
+    VariableDeclarationNode* outputFunc = new VariableDeclarationNode (CMinusAST::VOID, "output", 0, 0);
+    symbolTableVisitor.m_symbolTable.insert (inputFunc);
+    symbolTableVisitor.m_symbolTable.insert (outputFunc);
 
     // check the ast 
     ast->accept (&symbolTableVisitor);

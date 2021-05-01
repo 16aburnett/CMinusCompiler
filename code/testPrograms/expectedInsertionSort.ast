@@ -11,40 +11,40 @@ ProgramNode:
       If
         RelationalExpression: >=
           Left:
-            Variable: index
+            Variable: index: Int type
           Right:
             Integer: 1
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Variable: keepGoing
+              Variable: keepGoing: Int type
               Integer: 1
         If
           RelationalExpression: <
             Left:
-              Variable: temp
+              Variable: temp: Int type
             Right:
-              Subscript: x
+              Subscript: x: Int type
                 Index:
                   AdditiveExpression: -
                     Left:
-                      Variable: index
+                      Variable: index: Int type
                     Right:
                       Integer: 1
           CompoundStatement:
-            ExpressionStatement: 
+            ExpressionStatement:
               Assignment:
-                Variable: keepGoing
+                Variable: keepGoing: Int type
                 Integer: 1
           CompoundStatement:
-            ExpressionStatement: 
+            ExpressionStatement:
               Assignment:
-                Variable: keepGoing
+                Variable: keepGoing: Int type
                 Integer: 0
       Return
-        Variable: keepGoing
+        Variable: keepGoing: Int type
 
-  Function: sort: void type
+  Function: sort: Void type
     Parameter: a[]: Int type
     Parameter: size: Int type
     CompoundStatement:
@@ -52,160 +52,160 @@ ProgramNode:
       VariableDeclaration: currentIndex: Int type
       VariableDeclaration: index: Int type
       VariableDeclaration: keepGoing: Int type
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
-          Variable: keepGoing
+          Variable: keepGoing: Int type
           Integer: 1
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
-          Variable: currentIndex
+          Variable: currentIndex: Int type
           Integer: 1
       While
         RelationalExpression: <
           Left:
-            Variable: currentIndex
+            Variable: currentIndex: Int type
           Right:
-            Variable: size
+            Variable: size: Int type
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Variable: temp
-              Subscript: x
+              Variable: temp: Int type
+              Subscript: x: Int type
                 Index:
-                  Variable: currentIndex
-          ExpressionStatement: 
+                  Variable: currentIndex: Int type
+          ExpressionStatement:
             Assignment:
-              Variable: index
-              Variable: currentIndex
+              Variable: index: Int type
+              Variable: currentIndex: Int type
           While
             Assignment:
-              Variable: keepGoing
+              Variable: keepGoing: Int type
               RelationalExpression: ==
                 Left:
-                  FunctionCall: continueSorting
+                  FunctionCall: continueSorting: Int type
                     Arguments:
-                      Variable: x
-                      Variable: index
-                      Variable: temp
+                      Variable: x: Int type
+                      Variable: index: Int type
+                      Variable: temp: Int type
                 Right:
                   Integer: 1
             CompoundStatement:
-              ExpressionStatement: 
+              ExpressionStatement:
                 Assignment:
-                  Subscript: x
+                  Subscript: x: Int type
                     Index:
-                      Variable: index
-                  Subscript: x
+                      Variable: index: Int type
+                  Subscript: x: Int type
                     Index:
                       AdditiveExpression: -
                         Left:
-                          Variable: index
+                          Variable: index: Int type
                         Right:
                           Integer: 1
-              ExpressionStatement: 
+              ExpressionStatement:
                 Assignment:
-                  Variable: index
+                  Variable: index: Int type
                   AdditiveExpression: -
                     Left:
-                      Variable: index
+                      Variable: index: Int type
                     Right:
                       Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Variable: keepGoing
+              Variable: keepGoing: Int type
               Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Subscript: x
+              Subscript: x: Int type
                 Index:
-                  Variable: index
-              Variable: temp
+                  Variable: index: Int type
+              Variable: temp: Int type
           ExpressionStatement: 
             Assignment:
-              Variable: currentIndex
+              Variable: currentIndex: Int type
               AdditiveExpression: +
                 Left:
-                  Variable: currentIndex
+                  Variable: currentIndex: Int type
                 Right:
                   Integer: 1
 
-  Function: main: void type
+  Function: main: Void type
     CompoundStatement:
       VariableDeclaration: size: Int type
       VariableDeclaration: i: Int type
       VariableDeclaration: num: Int type
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
-          Variable: size
+          Variable: size: Int type
           Integer: 20
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
-          Variable: i
-          Variable: size
-      ExpressionStatement: 
+          Variable: i: Int type
+          Variable: size: Int type
+      ExpressionStatement:
         Assignment:
-          Variable: num
+          Variable: num: Int type
           Integer: 0
       While
         RelationalExpression: >
           Left:
-            Variable: i
+            Variable: i: Int type
           Right:
             Integer: 0
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Subscript: x
+              Subscript: x: Int type
                 Index:
                   AdditiveExpression: -
                     Left:
-                      Variable: i
+                      Variable: i: Int type
                     Right:
                       Integer: 1
-              Variable: num
-          ExpressionStatement: 
+              Variable: num: Int type
+          ExpressionStatement:
             Assignment:
-              Variable: i
+              Variable: i: Int type
               AdditiveExpression: -
                 Left:
-                  Variable: i
+                  Variable: i: Int type
                 Right:
                   Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
-              Variable: num
+              Variable: num: Int type
               AdditiveExpression: +
                 Left:
-                  Variable: num
+                  Variable: num: Int type
                 Right:
                   Integer: 1
-      ExpressionStatement: 
-        FunctionCall: sort
+      ExpressionStatement:
+        FunctionCall: sort: Void type
           Arguments:
-            Variable: x
-            Variable: size
-      ExpressionStatement: 
+            Variable: x: Int type
+            Variable: size: Int type
+      ExpressionStatement:
         Assignment:
-          Variable: i
+          Variable: i: Int type
           Integer: 0
       While
         RelationalExpression: <
           Left:
-            Variable: i
+            Variable: i: Int type
           Right:
-            Variable: size
+            Variable: size: Int type
         CompoundStatement:
-          ExpressionStatement: 
-            FunctionCall: output
+          ExpressionStatement:
+            FunctionCall: output: Void type
               Arguments:
-                Subscript: x
+                Subscript: x: Int type
                   Index:
-                    Variable: i
-          ExpressionStatement: 
+                    Variable: i: Int type
+          ExpressionStatement:
             Assignment:
-              Variable: i
+              Variable: i: Int type
               AdditiveExpression: +
                 Left:
-                  Variable: i
+                  Variable: i: Int type
                 Right:
                   Integer: 1

@@ -186,7 +186,7 @@ PrintVisitor::visit (ExpressionStatementNode* node)
 {
     printSpaces (m_level);
 
-    m_outputString << "ExpressionStatement: \n";
+    m_outputString << "ExpressionStatement:\n";
 
     ++m_level;
     if (node->m_expression != nullptr)

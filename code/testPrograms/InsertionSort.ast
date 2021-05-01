@@ -15,7 +15,7 @@ ProgramNode:
           Right:
             Integer: 1
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: keepGoing
               Integer: 1
@@ -32,19 +32,19 @@ ProgramNode:
                     Right:
                       Integer: 1
           CompoundStatement:
-            ExpressionStatement: 
+            ExpressionStatement:
               Assignment:
                 Variable: keepGoing
                 Integer: 1
           CompoundStatement:
-            ExpressionStatement: 
+            ExpressionStatement:
               Assignment:
                 Variable: keepGoing
                 Integer: 0
       Return
         Variable: keepGoing
 
-  Function: sort: void type
+  Function: sort: Void type
     Parameter: a[]: Int type
     Parameter: size: Int type
     CompoundStatement:
@@ -52,11 +52,11 @@ ProgramNode:
       VariableDeclaration: currentIndex: Int type
       VariableDeclaration: index: Int type
       VariableDeclaration: keepGoing: Int type
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: keepGoing
           Integer: 1
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: currentIndex
           Integer: 1
@@ -67,13 +67,13 @@ ProgramNode:
           Right:
             Variable: size
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: temp
               Subscript: x
                 Index:
                   Variable: currentIndex
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: index
               Variable: currentIndex
@@ -90,7 +90,7 @@ ProgramNode:
                 Right:
                   Integer: 1
             CompoundStatement:
-              ExpressionStatement: 
+              ExpressionStatement:
                 Assignment:
                   Subscript: x
                     Index:
@@ -102,7 +102,7 @@ ProgramNode:
                           Variable: index
                         Right:
                           Integer: 1
-              ExpressionStatement: 
+              ExpressionStatement:
                 Assignment:
                   Variable: index
                   AdditiveExpression: -
@@ -110,17 +110,17 @@ ProgramNode:
                       Variable: index
                     Right:
                       Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: keepGoing
               Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Subscript: x
                 Index:
                   Variable: index
               Variable: temp
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: currentIndex
               AdditiveExpression: +
@@ -129,20 +129,20 @@ ProgramNode:
                 Right:
                   Integer: 1
 
-  Function: main: void type
+  Function: main: Void type
     CompoundStatement:
       VariableDeclaration: size: Int type
       VariableDeclaration: i: Int type
       VariableDeclaration: num: Int type
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: size
           Integer: 20
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: i
           Variable: size
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: num
           Integer: 0
@@ -153,7 +153,7 @@ ProgramNode:
           Right:
             Integer: 0
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Subscript: x
                 Index:
@@ -163,7 +163,7 @@ ProgramNode:
                     Right:
                       Integer: 1
               Variable: num
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: i
               AdditiveExpression: -
@@ -171,7 +171,7 @@ ProgramNode:
                   Variable: i
                 Right:
                   Integer: 1
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: num
               AdditiveExpression: +
@@ -179,12 +179,12 @@ ProgramNode:
                   Variable: num
                 Right:
                   Integer: 1
-      ExpressionStatement: 
+      ExpressionStatement:
         FunctionCall: sort
           Arguments:
             Variable: x
             Variable: size
-      ExpressionStatement: 
+      ExpressionStatement:
         Assignment:
           Variable: i
           Integer: 0
@@ -195,13 +195,13 @@ ProgramNode:
           Right:
             Variable: size
         CompoundStatement:
-          ExpressionStatement: 
+          ExpressionStatement:
             FunctionCall: output
               Arguments:
                 Subscript: x
                   Index:
                     Variable: i
-          ExpressionStatement: 
+          ExpressionStatement:
             Assignment:
               Variable: i
               AdditiveExpression: +

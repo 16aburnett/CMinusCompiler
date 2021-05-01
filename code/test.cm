@@ -15,3 +15,9 @@ int main (void)
 {
     pizza (10);
 }
+
+// redeclaration of a built-in function
+int input (void)
+{
+    return 0;
+}

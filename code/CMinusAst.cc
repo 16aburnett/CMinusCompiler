@@ -24,7 +24,7 @@ CMinusAST::typeToString (CMinusAST::Type t)
     if (t == INT)
         return "Int";
     else
-        return "void";
+        return "Void";
 }
 
 //========================================================================

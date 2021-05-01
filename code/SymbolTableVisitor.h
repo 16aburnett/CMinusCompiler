@@ -33,6 +33,9 @@ struct SymbolTableVisitor : IVisitor
 {
     // for storing and looking up variable type information
     SymbolTable m_symbolTable;
+    
+    // stores parameters for adding to function scopes 
+    std::vector<ParameterNode*> m_parameters; 
 
     bool m_wasSuccessful = true;
 

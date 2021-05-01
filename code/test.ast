@@ -4,7 +4,7 @@ ProgramNode:
 
   Function: func: Int type
     Parameter: a: Int type
-    Parameter: b: Int type
+    Parameter: b[]: Int type
     Parameter: c: Int type
     Parameter: a: Int type
     CompoundStatement:

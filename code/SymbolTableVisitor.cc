@@ -43,7 +43,28 @@ SymbolTableVisitor::visit (ProgramNode* node)
 void 
 SymbolTableVisitor::visit (DeclarationNode* node)
 {
-    
+    bool wasSuccessful = m_symbolTable.insert (node);
+
+    if (!wasSuccessful)
+    {
+        std::string varname = node->m_id;
+        DeclarationNode* originalDeclaration = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
+        printf ("  Originally on line %d: column %d\n", 
+            originalDeclaration->m_lineno, 
+            originalDeclaration->m_columnno
+        );
+        printf ("  Redeclaration on line %d: column %d\n", 
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+
+    m_symbolTable.enterScope ();
+    node->accept (this);
+    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -51,7 +72,28 @@ SymbolTableVisitor::visit (DeclarationNode* node)
 void 
 SymbolTableVisitor::visit (VariableDeclarationNode* node)
 {
-    
+    bool wasSuccessful = m_symbolTable.insert (node);
+
+    if (!wasSuccessful)
+    {
+        std::string varname = node->m_id;
+        VariableDeclarationNode* originalVariableDeclaration = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
+        printf ("  Originally on line %d: column %d\n", 
+            originalVariableDeclaration->m_lineno, 
+            originalVariableDeclaration->m_columnno
+        );
+        printf ("  Redeclaration on line %d: column %d\n", 
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+
+    m_symbolTable.enterScope ();
+    node->accept (this);
+    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -59,7 +101,28 @@ SymbolTableVisitor::visit (VariableDeclarationNode* node)
 void 
 SymbolTableVisitor::visit (ArrayDeclarationNode* node)
 {
+    bool wasSuccessful = m_symbolTable.insert (node);
 
+    if (!wasSuccessful)
+    {
+        std::string varname = node->m_id;
+        ArrayDeclarationNode* originalArrayDeclaration = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
+        printf ("  Originally on line %d: column %d\n", 
+            originalArrayDeclaration->m_lineno, 
+            originalArrayDeclaration->m_columnno
+        );
+        printf ("  Redeclaration on line %d: column %d\n", 
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+
+    m_symbolTable.enterScope ();
+    node->accept (this);
+    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -116,6 +179,28 @@ void
 SymbolTableVisitor::visit (ParameterNode* node) 
 {
     // similar to declarations 
+    bool wasSuccessful = m_symbolTable.insert (node);
+
+    if (!wasSuccessful)
+    {
+        std::string varname = node->m_id;
+        ParameterNode* originalParameter = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
+        printf ("  Originally on line %d: column %d\n", 
+            originalDeclaration->m_lineno, 
+            originalDeclaration->m_columnno
+        );
+        printf ("  Redeclaration on line %d: column %d\n", 
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+
+    m_symbolTable.enterScope ();
+    node->accept (this);
+    m_symbolTable.exitScope ();
     
 }
 
@@ -147,6 +232,8 @@ SymbolTableVisitor::visit (IfStatementNode* node)
 void 
 SymbolTableVisitor::visit (WhileStatementNode* node) 
 {
+    node->m_condition->accept (this);
+    node->m_statement->accept (this);
 
 }
 
@@ -156,7 +243,10 @@ SymbolTableVisitor::visit (WhileStatementNode* node)
 void 
 SymbolTableVisitor::visit (ForStatementNode* node) 
 {
-
+    node->m_init->accept (this);
+    node->m_condition->accept (this);
+    node->m_update->accept (this);
+    node->m_statement->accept (this);
 }
 
 
@@ -165,7 +255,7 @@ SymbolTableVisitor::visit (ForStatementNode* node)
 void 
 SymbolTableVisitor::visit (ExpressionStatementNode* node) 
 {
-    
+    node->m_expression->accept (this);
 }
 
 //========================================================================
@@ -173,7 +263,8 @@ SymbolTableVisitor::visit (ExpressionStatementNode* node)
 void 
 SymbolTableVisitor::visit (ReturnStatementNode* node) 
 {
-    
+    if (node->m_expression != nullptr)
+        node->m_expression->accept (this);   
 }
 
 //========================================================================
@@ -210,7 +301,8 @@ SymbolTableVisitor::visit (ExpressionNode* node)
 void 
 SymbolTableVisitor::visit (AdditiveExpressionNode* node) 
 {
-    
+    node->m_lhs->accept (this);
+    node->m_rhs->accept (this);
 }
 
 //========================================================================
@@ -218,7 +310,8 @@ SymbolTableVisitor::visit (AdditiveExpressionNode* node)
 void 
 SymbolTableVisitor::visit (MultiplicativeExpressionNode* node) 
 {
-    
+    node->m_lhs->accept (this);
+    node->m_rhs->accept (this);
 }
 
 //========================================================================
@@ -226,7 +319,8 @@ SymbolTableVisitor::visit (MultiplicativeExpressionNode* node)
 void 
 SymbolTableVisitor::visit (RelationalExpressionNode* node) 
 {
-    
+    node->m_lhs->accept (this);
+    node->m_rhs->accept (this);
 }
 
 //========================================================================
@@ -234,7 +328,8 @@ SymbolTableVisitor::visit (RelationalExpressionNode* node)
 void 
 SymbolTableVisitor::visit (AssignmentExpressionNode* node) 
 {
-
+    node->m_lhs->accept (this);
+    node->m_rhs->accept (this);
 }
 
 //========================================================================
@@ -270,7 +365,24 @@ SymbolTableVisitor::visit (VariableExpressionNode* node)
 void 
 SymbolTableVisitor::visit (SubscriptExpressionNode* node) 
 {
+    DeclarationNode* declaration = m_symbolTable.lookup (node->m_id);
 
+    if(declaration == nullptr)
+    {
+        printf ("Semantic Error: '%s' was not declared in this scope\n", 
+            node->m_id.c_str ()
+        );
+        printf ("  Located on line %d: column %d\n",
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+    else
+    {
+        node->m_type = declaration->m_type;
+    }
 }
 
 //========================================================================
@@ -278,7 +390,24 @@ SymbolTableVisitor::visit (SubscriptExpressionNode* node)
 void 
 SymbolTableVisitor::visit (CallExpressionNode* node) 
 {
-
+    DeclarationNode* declaration = m_symbolTable.lookup (node->m_id);
+    
+    if(declaration == nullptr)
+    {
+        printf ("Semantic Error: '%s' was not declared in this scope\n", 
+            node->m_id.c_str ()
+        );
+        printf ("  Located on line %d: column %d\n",
+            node->m_lineno,
+            node->m_columnno
+        );
+        printf ("\n");
+        m_wasSuccessful = false;
+    }
+    else
+    {
+        node->m_type = declaration->m_type;
+    }
 }
 
 //========================================================================

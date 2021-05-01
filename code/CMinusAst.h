@@ -162,7 +162,8 @@ struct DeclarationNode : Node
     DeclarationNode (
         CMinusAST::Type _type, 
         std::string _id, 
-        int lineno, int columnno
+        int lineno, 
+        int columnno
     );
 
     //--------------------------------------------------------------------
@@ -291,7 +292,7 @@ struct ParameterNode : DeclarationNode
     
     //--------------------------------------------------------------------
 
-    virtual ~ParameterNode () {}
+    virtual ~ParameterNode ();
 
     //--------------------------------------------------------------------
 

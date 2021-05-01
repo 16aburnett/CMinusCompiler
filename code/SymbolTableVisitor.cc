@@ -152,25 +152,16 @@ SymbolTableVisitor::visit (FunctionDeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    // set up scope for the parameters and body of the function
-    m_symbolTable.enterScope ();
+    // Grab parameters so that the body can use them
+    for (ParameterNode* p : node->m_params)
+        m_parameters.push_back (p);
 
-    // add parameters to scope 
-    // parameters were changed to inherit from 
-    // DeclarationNode so we can add them to the scope
-    for (DeclarationNode* p : node->m_params)
-        p->accept (this);
-
-    // check body of function
-    // body would have a separate scope 
-    // but the scope will be handled in CompoundStatement.
-    // when looking up variables, the outter scopes
-    // are considered so the body has access to the parameters
-    // and the function declaration (for recursion)
+    // Check the body of the function
+    // the body should be a compound statement 
+    // which will handle the parameters in
+    // its own scope 
     node->m_body->accept (this);
 
-    // end of parameter/body scope
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -178,14 +169,16 @@ SymbolTableVisitor::visit (FunctionDeclarationNode* node)
 void 
 SymbolTableVisitor::visit (ParameterNode* node) 
 {
-    // similar to declarations 
+    // add declaration to the current scope 
     bool wasSuccessful = m_symbolTable.insert (node);
-
+    // adding to the symbol table is unsuccessful when 
+    // the declaration is a duplicate
     if (!wasSuccessful)
     {
+        // print error message for the redeclaration
         std::string varname = node->m_id;
-        ParameterNode* originalParameter = m_symbolTable.lookup (varname);
-        printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
+        DeclarationNode* originalDeclaration = m_symbolTable.lookup (varname);
+        printf ("Semantic Error: Redeclaration of Parameter '%s'\n", varname.c_str ());
         printf ("  Originally on line %d: column %d\n", 
             originalDeclaration->m_lineno, 
             originalDeclaration->m_columnno
@@ -197,11 +190,6 @@ SymbolTableVisitor::visit (ParameterNode* node)
         printf ("\n");
         m_wasSuccessful = false;
     }
-
-    m_symbolTable.enterScope ();
-    node->accept (this);
-    m_symbolTable.exitScope ();
-    
 }
 
 //========================================================================
@@ -274,6 +262,13 @@ SymbolTableVisitor::visit (CompoundStatementNode* node)
 {
     // compound statements have their own scope 
     m_symbolTable.enterScope ();
+
+    // if this is a function body,
+    // then add the parameters to this scope
+    for (ParameterNode* p : m_parameters)
+        p->accept (this);
+    // get rid of params since we added them
+    m_parameters.clear ();
 
     // visit the declaration statements 
     // any declaration will be added to this scope 

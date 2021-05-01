@@ -203,6 +203,10 @@ ParameterNode::ParameterNode (
 
 //------------------------------------------------------------------------
 
+ParameterNode::~ParameterNode () {}
+
+//------------------------------------------------------------------------
+
 void 
 ParameterNode::accept (IVisitor* visitor)
 {

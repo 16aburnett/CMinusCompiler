@@ -204,7 +204,7 @@ Parser::declaration ()
 
     // setup declaration node 
     // declaration could be a var or a function 
-    DeclarationNode* node; 
+    DeclarationNode* node = nullptr; 
 
     // declaration starts with <typeSpec> 
     CMinusAST::Type type = typeSpecifier ();
@@ -258,7 +258,7 @@ Parser::varDeclaration (
 {
     enter ("varDeclaration");
 
-    VariableDeclarationNode* node; 
+    VariableDeclarationNode* node = nullptr; 
 
     // optional array designation
     if (m_tokens[m_currentToken].type == LBRACK)
@@ -430,7 +430,7 @@ Parser::param ()
 {
     enter ("param");
 
-    ParameterNode* node; 
+    ParameterNode* node = nullptr; 
 
     CMinusAST::Type type = typeSpecifier ();
 

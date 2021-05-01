@@ -186,7 +186,7 @@ PrintVisitor::visit (ExpressionStatementNode* node)
 {
     printSpaces (m_level);
 
-    m_outputString << "ExpressionStatement: \n";
+    m_outputString << "ExpressionStatement:\n";
 
     ++m_level;
     if (node->m_expression != nullptr)
@@ -346,6 +346,9 @@ PrintVisitor::visit (VariableExpressionNode* node)
     printSpaces (m_level);
     m_outputString << "Variable: ";
     m_outputString << node->m_id;
+    m_outputString << ": ";
+    m_outputString << CMinusAST::typeToString(node->m_type);
+    m_outputString << " type\n";
     m_outputString << "\n";
 }
 
@@ -357,6 +360,9 @@ PrintVisitor::visit (SubscriptExpressionNode* node)
     printSpaces (m_level);
     m_outputString << "Subscript: ";
     m_outputString << node->m_id;
+    m_outputString << ": ";
+    m_outputString << CMinusAST::typeToString(node->m_type);
+    m_outputString << " type\n";
     m_outputString << "\n";
 
     ++m_level;
@@ -379,6 +385,9 @@ PrintVisitor::visit (CallExpressionNode* node)
     printSpaces (m_level);
     m_outputString << "FunctionCall: ";
     m_outputString << node->m_id;
+    m_outputString << ": ";
+    m_outputString << CMinusAST::typeToString(node->m_type);
+    m_outputString << " type\n";
     m_outputString << "\n";
 
     ++m_level;

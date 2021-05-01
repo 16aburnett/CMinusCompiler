@@ -91,9 +91,7 @@ SymbolTableVisitor::visit (VariableDeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    m_symbolTable.enterScope ();
     node->accept (this);
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -120,9 +118,7 @@ SymbolTableVisitor::visit (ArrayDeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    m_symbolTable.enterScope ();
     node->accept (this);
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================

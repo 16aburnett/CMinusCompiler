@@ -62,9 +62,6 @@ SymbolTableVisitor::visit (DeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    m_symbolTable.enterScope ();
-    node->accept (this);
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -77,7 +74,7 @@ SymbolTableVisitor::visit (VariableDeclarationNode* node)
     if (!wasSuccessful)
     {
         std::string varname = node->m_id;
-        VariableDeclarationNode* originalVariableDeclaration = m_symbolTable.lookup (varname);
+        DeclarationNode* originalVariableDeclaration = m_symbolTable.lookup (varname);
         printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
         printf ("  Originally on line %d: column %d\n", 
             originalVariableDeclaration->m_lineno, 
@@ -91,9 +88,6 @@ SymbolTableVisitor::visit (VariableDeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    m_symbolTable.enterScope ();
-    node->accept (this);
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -106,7 +100,7 @@ SymbolTableVisitor::visit (ArrayDeclarationNode* node)
     if (!wasSuccessful)
     {
         std::string varname = node->m_id;
-        ArrayDeclarationNode* originalArrayDeclaration = m_symbolTable.lookup (varname);
+        DeclarationNode* originalArrayDeclaration = m_symbolTable.lookup (varname);
         printf ("Semantic Error: Redeclaration of '%s'\n", varname.c_str ());
         printf ("  Originally on line %d: column %d\n", 
             originalArrayDeclaration->m_lineno, 
@@ -120,9 +114,6 @@ SymbolTableVisitor::visit (ArrayDeclarationNode* node)
         m_wasSuccessful = false;
     }
 
-    m_symbolTable.enterScope ();
-    node->accept (this);
-    m_symbolTable.exitScope ();
 }
 
 //========================================================================
@@ -222,11 +213,9 @@ SymbolTableVisitor::visit (WhileStatementNode* node)
 {
     node->m_condition->accept (this);
     node->m_statement->accept (this);
-
 }
 
 //========================================================================
-
 
 void 
 SymbolTableVisitor::visit (ForStatementNode* node) 
@@ -236,7 +225,6 @@ SymbolTableVisitor::visit (ForStatementNode* node)
     node->m_update->accept (this);
     node->m_statement->accept (this);
 }
-
 
 //========================================================================
 

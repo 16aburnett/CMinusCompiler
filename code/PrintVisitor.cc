@@ -348,7 +348,7 @@ PrintVisitor::visit (VariableExpressionNode* node)
     m_outputString << node->m_id;
     m_outputString << ": ";
     m_outputString << CMinusAST::typeToString(node->m_type);
-    m_outputString << " type\n";
+    m_outputString << " type";
     m_outputString << "\n";
 }
 
@@ -362,7 +362,7 @@ PrintVisitor::visit (SubscriptExpressionNode* node)
     m_outputString << node->m_id;
     m_outputString << ": ";
     m_outputString << CMinusAST::typeToString(node->m_type);
-    m_outputString << " type\n";
+    m_outputString << " type";
     m_outputString << "\n";
 
     ++m_level;
@@ -387,7 +387,7 @@ PrintVisitor::visit (CallExpressionNode* node)
     m_outputString << node->m_id;
     m_outputString << ": ";
     m_outputString << CMinusAST::typeToString(node->m_type);
-    m_outputString << " type\n";
+    m_outputString << " type";
     m_outputString << "\n";
 
     ++m_level;

@@ -366,6 +366,9 @@ SymbolTableVisitor::visit (SubscriptExpressionNode* node)
     {
         node->m_type = declaration->m_type;
     }
+
+    // visit subscript
+    node->m_subscript->accept (this);
 }
 
 //========================================================================
@@ -391,6 +394,10 @@ SymbolTableVisitor::visit (CallExpressionNode* node)
     {
         node->m_type = declaration->m_type;
     }
+
+    // check the arguments 
+    for (ExpressionNode* a : node->m_args)
+        a->accept (this);
 }
 
 //========================================================================

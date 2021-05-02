@@ -7,21 +7,29 @@ Date:       TBD
 
 Contributions:
  - Amy:
-    - 
+    - SymbolTable functions
+    - Added location info for Semantic errors
+    - Worked on SymbolTableVisitor methods
  - Lauren:
-    - 
+    - Set up the initial files for the SymbolTable
+    - Worked on SymbolTableVisitor methods
+    - Updated the PrintVisitor
 
 //========================================================================
 
 Functionally Working:
     - Lexer
     - Parser
-    - PrintVisitor
+    - Semantic Analysis 
+    - PrintVisitor (With new types)
+    - Matches expected InsertionSort.ast 
+        With the exception of one of the ExpressionStatement lines
+        which has an extra space in the expected file 
 
 //========================================================================
 
 Not Functionally Working:
-
+    - Code gen (Not yet implemented)
 
 //========================================================================
 
@@ -29,6 +37,8 @@ Struggle Areas:
     - std::unique_ptr
         - I don't believe I have used a unique_ptr before and that took some
             research to figure out. 
-
+    - Inheritance
+        - Sometimes while working with the inheritance, we got 
+            segfaults and it was initially difficult to debug. 
 
 //========================================================================
